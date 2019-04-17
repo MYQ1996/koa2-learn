@@ -1,4 +1,5 @@
 function pv(ctx) {
+    ctx.session.count++
     global.console.log('pv',ctx.path)
 }
 
@@ -7,4 +8,4 @@ module.exports=function(){
         pv(ctx)
         await next()
     }
-}
+} 

@@ -143,3 +143,61 @@ router.get('/getCookie', async (ctx, next) => {
 })
 ```
 * <br />
+
+# redis
+
+客户端用cookie<br />服务器用session
+
+当你用户比较多的情况下，就要存储数据库了redis
+
+<a name="c48e4911"></a>
+### 1、使用brew命令安装redis
+brew install redis
+<a name="b32087cc"></a>
+### 2、启动redis
+后台方式启动，brew services start redis。这样启动的好处是把控制台关掉后，redis仍然是启动的。当然，如果没有这样的需求，也可以这样启动<br />redis-server /usr/local/etc/redis.conf
+<a name="8ccee0f1"></a>
+### 3、关闭redis
+brew services stop redis
+<a name="a33d1a17"></a>
+### 4、使用控制台连接redis
+redis-cli<br />redis-cli -h 127.0.0.1 -p  
+
+
+> npm i koa-generic-session koa-redis
+
+
+```javascript
+const session = require('koa-generic-session')
+
+const Redis = require('koa-redis')
+
+app.keys=['keys','keyskeys']
+
+app.use(session({
+
+	store:new Redis()
+
+}))
+```
+
+
+> redis-cli
+
+keys *
+
+get fix<br />hget fix name
+
+<a name="a82d4b29"></a>
+### 5、增加接口形式的调用
+
+```
+router.get('/fix', async function (ctx, next) {
+  const st = await Store.hset('fix',"name",Math.random());
+  ctx.body = {
+    code:0
+  }
+})
+```
+
+

@@ -9,13 +9,27 @@ const py = require('./middleware/koa-py')
 const index = require('./routes/index')
 const users = require('./routes/users')
 
+const mongoose = require('mongoose')
+const dbConfig = require('./dbs/config.js')
+
+const session = require('koa-generic-session')
+const Redis = require('koa-redis')
+
 // error handler
 onerror(app)
+app.keys=['keys','keyskeys']
+
+app.use(session({
+  key:'mt',
+  prefix:'mtpr',
+  store:new Redis()
+}))
 
 // middlewares
 app.use(bodyparser({
   enableTypes:['json', 'form', 'text']
 }))
+
 app.use(py())
 app.use(json())
 app.use(logger())
@@ -36,6 +50,10 @@ app.use(async (ctx, next) => {
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
+
+mongoose.connect(dbConfig.dbs,{
+  useNewUrlParser:true
+})
 
 // error-handling
 app.on('error', (err, ctx) => {
